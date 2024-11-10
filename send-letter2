@@ -1,0 +1,44 @@
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+ 
+def send_email_yandex(sender_email, password, receiver_emails, subject, body):
+    # Настройка SMTP-сервера
+    smtp_server = "smtp.yandex.ru"
+    smtp_port = 465
+ 
+# Создаем объект сообщения
+    msg = MIMEMultipart()
+    msg['From'] = sender_email
+    msg['To'] = ', '.join(receiver_emails) # Преобразуем список адресов в строку
+    msg['Subject'] = subject
+ 
+# Добавляем тело письма
+    msg.attach(MIMEText(body, 'plain'))
+ 
+    try:
+    # Установка соединения с сервером
+        server = smtplib.SMTP_SSL(smtp_server, smtp_port)
+        server.login(sender_email, password)
+ 
+    # Отправка письма
+        server.send_message(msg)
+        print("Письмо успешно отправлено")
+ 
+    except Exception as e:
+        print(f"Произошла ошибка: {e}")
+ 
+    finally:
+   
+    # Закрытие соединения с сервером \
+        server.quit()
+ 
+# Замените эти данные на свои
+sender_email = "адрес отправителя"
+password = "пароль отправителя"
+# Пароль приложения из настроек Яндекса
+receiver_emails = ["адрес получателя1", "адрес получателя2"]
+subject = "тема сообщения"
+body = "сообщение"
+ 
+send_email_yandex(sender_email, password, receiver_emails, subject, body)
